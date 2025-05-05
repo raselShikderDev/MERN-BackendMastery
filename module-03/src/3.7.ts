@@ -25,10 +25,6 @@
 
 
 
-
-
-
-
 //   🧠 Problem: Tracking Number of Users with Static Property
 //   You are building a User class for an app, and you want to track how many users have been created, regardless of their individual instances.
   
