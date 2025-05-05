@@ -3,7 +3,7 @@
 // Type Gurd & In Gurd checking
 
 
-// type gurd
+// type gurd  - typeof
 type anything = string | number
 const calculate = (param1:anything, param2:anything):anything=>{
     if(typeof param1 === "number" && typeof param2 === "number"){
@@ -18,7 +18,7 @@ console.log(calculate(45, 56))
 
 
 
-// In type
+// type gurd -  in gurd type
 
 
 

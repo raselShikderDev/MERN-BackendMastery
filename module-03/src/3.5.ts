@@ -32,7 +32,6 @@
         test(){
             this.balance          // Balance is accesable while i chnage modidfier of balance property from private to protected
         }
-    
     }
     
     
