@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",                // JavaScript version to compile to
+    "module": "NodeNext",              // Use Node's native ESM support
+    "moduleResolution": "NodeNext",    // Use Node's module resolution logic
+    "esModuleInterop": true,           // Allow default imports from CommonJS modules
+    "strict": true,                    // Enable all strict type-checking options
+    "skipLibCheck": true               // Skip type checking of .d.ts files (speeds up build)
+  }
+}
