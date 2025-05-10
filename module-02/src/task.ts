@@ -166,13 +166,68 @@ function processData(data: unknown): number | string {
 // Task 12: Never Type
 // Objective: Use the never type for functions that don’t return.
 
-// Instructions:
-// Write a function handleError that:
-// Accepts a message: string.
-// Throws an error with the given message.
-// Use the never return type to indicate that this function never returns.
-
 const handleError =(value:string):never=>{
   throw new Error(`Did not macth with ${value}`);
 }
 // console.log(handleError("somthing"));
+
+
+
+// Task 13: Generics with Functions and Interfaces
+// Objective: Use generics to handle different types.
+
+const uniqArray =<T extends Iterable<unknown>>(value:T):T[]=>{
+  const uniqArray:T[]= [...new Set(value)]
+  return uniqArray
+}
+// console.log(uniqArray<string[]>(["n1", "n2", "n2", "n3"]))
+// console.log(uniqArray<number[]>([1, 3, 3, 4, 2, 4, 5, 6, 1, ]))
+
+
+// Task 14: Asynchronous TypeScript and Type Aliases
+// Objective: Simulate an asynchronous operation with TypeScript.
+
+const getInfo =():Promise<{name:string, age:number}>=>{
+  const data:{name:string, age:number} = {
+    name:"rasel",
+    age:23,
+  }
+    return new Promise((resolve, reject)=>{
+    setTimeout(()=>{
+      resolve(data)
+    }, 2000)
+  })
+}
+// getInfo().then(console.log);
+
+
+// Task 15: Type Guards
+// Objective: Create custom type guards for more accurate type checking.
+
+function isString(value: unknown):string{
+  if (typeof value !== "string") throw new Error("Its not string");
+    function printUpperCase(value: unknown): string{
+      if (typeof value !== "string") throw new Error("Its not string");
+      return value.toUpperCase()
+    }
+    return printUpperCase(value) 
+}
+// console.log(isString("Rasel"));
+
+
+
+// Task 16: Utility Types and Keyof Constraints
+// Objective: Access object properties dynamically using keyof.
+
+// Instructions:
+// Create a function that:
+// Takes an object and a key.
+// Returns the property value from the object based on the provided key.
+// Use keyof to constrain the key to valid properties of the object.
+
+
+const utilityFunc =<T, X extends keyof T>(obj:T, key:X):T[X]=>{
+return obj[key]
+}
+
+// console.log(utilityFunc({name:"Rasel", role:"mern", isMarried:false, age:23}, "name"));
