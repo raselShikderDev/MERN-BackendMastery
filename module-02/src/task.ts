@@ -231,3 +231,20 @@ return obj[key]
 }
 
 // console.log(utilityFunc({name:"Rasel", role:"mern", isMarried:false, age:23}, "name"));
+
+
+
+function twoSum(nums: number[], target: number): number[] {
+  let c = 0
+    const result:number = nums.reduce((prev, curr, currInd, arr):number=>{
+      const sum:number = prev + curr
+      c = c + 1
+            console.log(`Print number: ${c} {prev: ${prev}, curr: ${curr}, currInd: ${currInd} Arr: ${arr}`);
+
+      if(sum === target) return currInd
+    })
+    console.log(result );
+    
+};
+
+twoSum([2,7,11,15], 9)
