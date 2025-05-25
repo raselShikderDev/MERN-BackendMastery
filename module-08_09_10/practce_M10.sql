@@ -57,6 +57,7 @@ WHERE score > 90 AND EXISTS (SELECT name FROM departments WHERE students.id = de
 -- Problem 05
 CREATE VIEW student_details AS SELECT students.stu_name, departments.dept_name, students.score FROM students JOIN departments ON students.department_id = departments.id
 
+
 SELECT stu_name, dept_name, score FROM student_details
 
 
