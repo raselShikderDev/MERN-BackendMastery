@@ -52,7 +52,7 @@ const server = http.createServer((req, res) => {
     res.end(getData);
   }
   // POST method
-  else if (req.url === "/create-todos" && req.method === "POST") {
+  else if (req.url === "/create-todo" && req.method === "POST") {
     let data = "";
     req.on("data", (chunk) => {
       data += chunk;
@@ -113,12 +113,104 @@ const server = http.createServer((req, res) => {
     res.writeHead(200, { "Content-Type": "application/json" });
     res.end(stringToDo);
   }
+
+   // PATCH method
+  else if (urlpath.pathname === "/delete-todo" && req.method === "PATCH") {
+   // Getting userId
+    if (!urlpath.searchParams.has("id")) {
+    res.writeHead(401, { "Content-Type": "application/json" });
+        return res.end(JSON.stringify({ error: "Invalid paremeter" }));  
+    }
+    const userId = parseInt(urlpath.searchParams.get("id"))
+    if (isNaN(userId)) {
+      res.writeHead(404, { "Content-Type": "application/json" });
+        return res.end(JSON.stringify({ error: "User id not found" }));
+    }
+    let data = "";
+    req.on("data", (chunk) => {
+      data += chunk;
+    });
+
+    req.on("end", () => {
+      try {
+        const {title} = JSON.parse(data);
+        console.log("Recived title's data :", title);
+        const filepath = path.join(__dirname, "newData.json")
+        // Reading existing file
+        
+        
+          const fileContent = fs.readFileSync(filepath, {encoding: "utf-8"})
+          const parseTodos = JSON.parse(fileContent)
+        
+        // Create new todo
+        parseTodos.createdAt = new Date().toLocaleString()
+       const myTodoIndex = parseTodos.findIndex((todo)=> todo.id === userId)
+       if (myTodoIndex === -1) {
+        res.writeHead(404, { "Content-Type": "application/json" });
+        return res.end(JSON.stringify({ error: "todo not found" }));
+       }
+        console.log(myTodoIndex);
+
+        parseTodos[myTodoIndex].title = title
+        console.log("title updated: ", parseTodos[myTodoIndex]);
+        
+        // update todo list
+        fs.writeFileSync(filepath, JSON.stringify(parseTodos, null, 2))
+
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ message: "todo updated", parseTodos }));
+      } catch (error) {
+        res.writeHead(404, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: "Invalid json" }));
+      }
+    });
+  }
+
+  // Delete Method
+  else if (urlpath.pathname === "/delete-todo" && req.method === "DELETE") {
+   // Getting userId
+    if (!urlpath.searchParams.has("id")) {
+    res.writeHead(401, { "Content-Type": "application/json" });
+        return res.end(JSON.stringify({ error: "Invalid paremeter" }));  
+    }
+    const userId = parseInt(urlpath.searchParams.get("id"))
+    if (isNaN(userId)) {
+      res.writeHead(404, { "Content-Type": "application/json" });
+        return res.end(JSON.stringify({ error: "User id not found" }));
+    }
+      console.log(userId);
+      try {
+        const filepath = path.join(__dirname, "newData.json")
+        // Reading existing file
+          const fileContent = fs.readFileSync(filepath, {encoding: "utf-8"})
+          const parseTodos = JSON.parse(fileContent)
+        
+        // find  todo
+       const myTodoIndex = parseTodos.filter((todo)=> todo.id === userId)
+       if (myTodoIndex === -1) {
+        res.writeHead(404, { "Content-Type": "application/json" });
+        return res.end(JSON.stringify({ error: "todo not found" }));
+       }
+
+        const updatedTodos = parseTodos.filter((todo)=> todo.id === userId)
+        
+        // update todo list
+        fs.writeFileSync(filepath, JSON.stringify(updatedTodos, null, 2))
+
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ message: "todo deleted" }));
+      } catch (error) {
+        res.writeHead(404, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: "Invalid json" }));
+      }
+  }
+
   else {
     res.writeHead(404, { "Content-Type": "text/plain" });
     res.end("Route not found");
   }
 });
 
-server.listen(5000, "0.0.0.0", () => {
-  console.log("Server running at: ", "http://0.0.0.0:5000");
+server.listen(5000, "127.0.0.1", () => {
+  console.log("Server running at: ", "http://127.0.0.1:5000");
 });
