@@ -1,0 +1,65 @@
+// // Task of Module 15
+// // Problem 01 - Grater than <value>
+// db.test.find({
+//     age:{$gt:30}
+// })
+//     .projection({email:1, name:1})
+
+
+// // Problem 02 - <finding feild value using Or oparetor>
+// db.test.find({
+//     $or: [{favoutiteColor:{$eq: "Maroon"}}, {favoutiteColor:{$eq: "Blue"}}]
+// })
+
+
+// Problem 03 <finiding empty array of an feild>
+// db.test.find({
+//     skills:{$exists: true, $eq: []}
+// })
+
+// db.test.find({
+//     skills:{$size: 0}
+// })
+
+
+// // Problem 04 <Finding a feild which has two value in a array by And oparetor>
+// db.test.find({
+//   "skills.name": { 
+//       $all: [
+//             {$regex: "^Javascript$", $options:"i"}, 
+//             {$regex: "^Java$", $options:"i"}  
+//         ]
+//   }
+// })
+
+
+
+// // Problem 05 <Finding a doc by email and inserting a object in a array of objecj called skills>
+// db.test.updateOne(
+//     { email: "amccurry3@cnet.com" },
+//     {
+//         $addToSet: {
+//             skills: {
+//                 "name": "Python",
+//                 "level": "Beginner",
+//                 "isLearning": true
+//             }
+//         }
+//     }
+// )
+
+
+// // Problem 07 <Removing a object from an array based on a feild of object name>
+// db.test.updateMany({
+//     skills:{$elemMatch: {"name":{$regex: "^Kotlin$", $options:"i"}},
+//     {
+//         $pull: {skills:{
+//             "name":{$regex: "^Kotlin$", $options:"i"}}
+//         }}
+//     }
+// })
+
+
+
+
+

@@ -1,0 +1,142 @@
+// // Problem 01  <Retruvung count of each individuals who are active for each gender>
+// db.massiveData.aggregate([
+//     // Stage 01
+//     {
+//         $match: {
+//             isActive: true
+//         }
+//     },
+q
+//     // Stage 02
+//     {
+//         $group: {
+//             _id: "$gender",
+//             count: { $sum: 1 }
+//         }
+//     }
+// ])
+
+
+
+// // Problem 02 <Retrieve the names and email addresses of individuals who are active and have a favorite fruit of banana>
+// db.massiveData.aggregate([
+//     // Stage 01
+//     {
+//       $match:{
+//           isActive:true,
+//           favoriteFruit:{$regex: "^banana$", $options:"i"}
+//       }  
+//     },
+
+//     // Stage 02
+//     {
+//         $project: {
+//             name:1,
+//             email:1
+//         }
+//     },
+// ])
+
+
+
+// // Problem 03 <Find the avarage age of individuals for each favorite fruit, then sort the results in descesing order of average age>
+// db.massiveData.aggregate([
+//     // Stage 01
+//     {
+//         $group:{
+//             _id:"$favoriteFruit",
+//             Avrage:{
+//                 $avg:"$age"
+//             }
+//         }
+//     },
+//     // Stage 02
+//     {
+//         $sort: {
+//             age:-1
+//         }
+//     }
+// ])
+
+
+// // Problem 04 <Retrive Uniqe Freind names for individiuals who have at least one feind, andinclude only the freinds with names stating with the letter W>
+// db.massiveData.aggregate([
+//     // stage 01
+//     {
+//         $unwind: "$friends"
+//     },
+//     // Stage 02
+//     {
+//         $match: {
+//             "friends.name": { $regex: /^W/ }
+//         }
+//     },
+//     // Stage 03
+//     {
+//         $group: {
+//             _id: "$friends.name",
+//         }
+//     },
+// ])
+
+// // Problem 05 <Use $facet to separate individuals into two facets based on their age: those below 30 and those above 30. Then, within each facet, bucket the individuals into age ranges (e.g., 20-25, 26-30, etc.) and sort them by age within each bucket.>
+// db.massiveData.aggregate([
+//     {
+//         $facet: {
+//              // PipeLine one
+//             lessage: [
+//                     // Stage 01
+//                 {
+//                     $match: {
+//                         age: { $lt:30 }
+//                     },
+//                 },
+//                     // Stage 02
+//                 {
+//                     $bucket: {
+//                           groupBy: "$age",
+//                           boundaries: [ 20, 25, 30 ],
+//                           default: "Other",
+//                           output: {
+//                             "underthirty" : { $push: "$$ROOT" }
+//                           }
+//                         }
+//                 },
+//                 // Stage 03
+//                 {
+//                     $sort: {
+//                         age:1
+//                     }
+//                 }
+//             ],
+//              // PipeLine Two
+//             avobeage: [
+//                     // Stage 01
+//                 {
+//                     $match: {
+//                         age: { $gt:30 }
+//                     },
+//                 },
+//                     // Stage 02
+//                 {
+//                     $bucket: {
+//                           groupBy: "$age",
+//                           boundaries: [ 20, 25, 30 ],
+//                           default: "Other",
+//                           output: {
+//                             "underthirty" : { $push: "$$ROOT" }
+//                           }
+//                         }
+//                 },
+//                 // Stage 03
+//                 {
+//                     $sort: {
+//                         age:1
+//                     }
+//                 }
+//             ]
+//         }
+//     },
+// ])
+
+
