@@ -49,6 +49,19 @@
 // )
 
 
+// // Problem 06
+// db.test.updateOne(
+//     {
+//         email: "amccurry3@cnet.com"
+//     },
+//     {
+//         $addToSet: {
+//             languages:"Spanish"
+//         }
+//     }
+// )
+
+
 // // Problem 07 <Removing a object from an array based on a feild of object name>
 // db.test.updateMany({
 //     skills:{$elemMatch: {"name":{$regex: "^Kotlin$", $options:"i"}},
