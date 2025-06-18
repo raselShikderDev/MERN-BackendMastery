@@ -16,8 +16,8 @@ const createSchemaZod = z.object({
 
 // Get all users 
 users.get("/", async(req: Request, res: Response)=>{
-    // const notes = await NoteModel.findOne({_id:"684f837aac4953e6fb660bd0"})
-    const users = await UserModel.find()
+    // const notes = await userModel.findOne({_id:"684f837aac4953e6fb660bd0"})
+    const users = await UserModel.find({})
     res.status(201).json({
         success:true,
         message:"Users successfully fetch from Database",
@@ -27,8 +27,12 @@ users.get("/", async(req: Request, res: Response)=>{
 
 // Get a singel user 
 users.get("/:userId", async(req: Request, res: Response)=>{
-    const userId = req.params.noteId
+    console.log("got a request of singel user");
+    
+    const userId = req.params.userId
     const user = await UserModel.findById(userId)
+    console.log("singel user: ", user);
+    
     res.status(200).json({
         success:true,
         message:"User successfully fetch from Database",
@@ -39,8 +43,9 @@ users.get("/:userId", async(req: Request, res: Response)=>{
 // Create user
 users.post("/create-user", async(req: Request, res: Response) => {
     console.log("Create user request recived")
-    // // Approch - 01
-    // const myUser = new noteModel({
+
+// // Approch - 01
+// const myUser = new noteModel({
 //     {
 //   "fName": "John",
 //   "lName": "Doe",
@@ -54,11 +59,8 @@ users.post("/create-user", async(req: Request, res: Response) => {
 
 
     // Approch - 02
-    const data = await req.body
-
-   
-    
-    // checking user data validation
+    // // checking user data validation by zod
+    //  const data = await req.body
     // let data;
     // try {
     //      data = createSchemaZod.parseAsync(req.body)
@@ -70,12 +72,26 @@ users.post("/create-user", async(req: Request, res: Response) => {
     //     error,
     // })
     // }
-
     // const newUser = await UserModel.create(data)
 
-     const newUser = new UserModel(data)
-    await newUser.hashPassword(newUser.password)
-    await newUser.save()
+    // // Built in custom Instance method
+    // const data = await req.body
+    // const newUser = new UserModel(data)
+    // await newUser.hashPassword(newUser.password)
+    // await newUser.save()
+
+
+    // // Built in custom static method
+    //  const data = await req.body
+    //  const hashedPassword = await UserModel.hashPassword(data.password)
+    //  console.log("Static", hashedPassword);
+    //  data.password = hashedPassword
+    //  const newUser = await UserModel.create(data)
+
+    
+    // Using pre save hook to convert into hash
+    const data = await req.body
+    const newUser = await UserModel.create(data)
 
     res.status(201).json({
         success:true,
@@ -105,10 +121,13 @@ users.delete("/:userId", async(req: Request, res: Response)=>{
     const userId = req.params.userId
     // const note = await NoteModel.findOne({_id:userId})
     // const note = await NoteModel.findOneAndDelete({_id:userId})
-    const user = await UserModel.findByIdAndDelete(userId)
+    // const user = await UserModel.findByIdAndDelete(userId)
+
+    // post query hook
+    const user = await UserModel.findOneAndDelete({_id:userId})
     res.status(200).json({
         success:true,
-        message:"User successfully fetch from Database",
+        message:"User successfully deleted from Database",
         data:user
     })
 })

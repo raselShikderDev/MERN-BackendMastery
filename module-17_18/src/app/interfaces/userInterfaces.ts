@@ -1,12 +1,11 @@
+import { Model } from "mongoose";
+
 export interface IAddress {
   city: string;
   street: string;
   zip: number;
 }
 
-export interface IPasswordHash{
-  hashPassword(pass:string):string
-}
 
 export interface IUser {
   fName: string;
@@ -23,4 +22,15 @@ export interface IUser {
     default: false;
   };
   address: IAddress;
+}
+
+
+
+export interface IPasswordHash{
+  hashPassword(pass:string):string
+}
+
+
+export interface IStaticPasswordHash extends Model<IUser>{
+  hashPassword(pass:string):string
 }
