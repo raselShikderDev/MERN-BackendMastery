@@ -36,8 +36,6 @@ import { CalendarIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
-import { v4 as uuidv4 } from "uuid";
-import type { ITask } from "@/redux/types";
 import { addTask } from "@/redux/features/todoSlice";
 import { useAppDispatch } from "@/redux/hook";
 
@@ -54,13 +52,7 @@ export function AddTaskModal() {
   });
 
   const onsubmit = (data: any) => {
-    const ultimateData:ITask = {
-      id: uuidv4(),
-      ...data,
-      isComplete:false,
-    }
-    console.log(ultimateData);
-    dispatch(addTask(ultimateData))
+    dispatch(addTask(data))
   };
 
   return (
