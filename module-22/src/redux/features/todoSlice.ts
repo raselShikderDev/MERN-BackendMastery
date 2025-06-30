@@ -9,9 +9,26 @@ interface IinitialState {
 
 const initialState: IinitialState = {
   tasks: [
+    
     {
-      id: "this is ID",
-      title: "This is title",
+      id: "this is ID 01",
+      title: "This is title 01",
+      description: "This is the description",
+      dueDate: "2025-06-27",
+      isComplete: false,
+      priority: "Normal",
+    },
+    {
+      id: "this is ID 02",
+      title: "This is title 02",
+      description: "This is the description",
+      dueDate: "2025-06-27",
+      isComplete: false,
+      priority: "Medium",
+    },
+    {
+      id: "this is ID 03",
+      title: "This is title 03",
       description: "This is the description",
       dueDate: "2025-06-27",
       isComplete: false,

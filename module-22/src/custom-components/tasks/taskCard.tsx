@@ -13,9 +13,9 @@ export default function TaskCard({ task }: TaskCardProps) {
   const { title, description, dueDate, isComplete, priority } = task;
 
   const priorityColors: Record<string, string> = {
-    low: "bg-green-500",
-    medium: "bg-yellow-500",
-    high: "bg-red-500",
+    Normal: "bg-green-500",
+    Medium: "bg-yellow-500",
+    High: "bg-red-500",
   };
 
   return (
