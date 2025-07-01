@@ -37,12 +37,10 @@ export default function TaskCard({ task }: TaskCardProps) {
 
   const dispatch = useAppDispatch();
   const users = useAppSelector(userSelector)
-  const user = users.map((user)=>{
-    if(user.userId === assignedTo){
-      return user
-    }
-  })
-  log
+  const assignedUser = users.find(user => user.userId === assignedTo);
+  console.log(`Users: ${users}`)
+  console.log(`User: ${assignedUser?.name}`)
+  
   // Handle open/close of the edit modal
   const [open, setOpen] = useState(false);
 
@@ -104,9 +102,9 @@ export default function TaskCard({ task }: TaskCardProps) {
                   🗓 Due: {format(dueDate, "PPP")}
                 </p>
               )}
-              {user && (
+              {assignedUser && (
                 <p className="text-xs text-muted-foreground mt-2">
-                  Assigned To: {users}
+                  Assigned To: { assignedUser.name ? assignedUser.name : "assigned to non"}
                 </p>
               )}
             </div>

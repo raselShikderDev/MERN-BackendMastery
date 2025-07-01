@@ -39,10 +39,12 @@ import { format } from "date-fns";
 import { addTask } from "@/redux/features/todoSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { userSelector } from "@/redux/features/userSlice";
+import { useState } from "react";
 
 export function AddTaskModal() {
-    const dispatch = useAppDispatch();
-    const users = useAppSelector(userSelector)
+  const [open, setOpen] = useState(false)
+  const dispatch = useAppDispatch();
+  const users = useAppSelector(userSelector);
 
   const form = useForm({
     defaultValues: {
@@ -50,15 +52,18 @@ export function AddTaskModal() {
       description: "",
       priority: "Normal",
       dueDate: undefined,
+      assignedTo: "none",
     },
   });
 
   const onsubmit = (data: any) => {
-    dispatch(addTask(data))
+    dispatch(addTask(data));
+    setOpen(true)
+    form.reset()
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <form>
         <DialogTrigger asChild>
           <Button className="bg-green-500 text-black font-bold hover:bg-white hover:text-black-500">
@@ -134,7 +139,7 @@ export function AddTaskModal() {
                 />
                 <FormField
                   control={form.control}
-                  name="priority"
+                  name="assignedTo"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Assign to</FormLabel>
@@ -148,12 +153,13 @@ export function AddTaskModal() {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {
-                            users.map((user)=>{
-                             return <SelectItem key={user.userId} value={user.name}>{user.name}</SelectItem>
-                            })
-                            
-                          }
+                          {users.map((user) => {
+                            return (
+                              <SelectItem key={user.userId} value={user.userId}>
+                                {user.name}
+                              </SelectItem>
+                            );
+                          })}
                         </SelectContent>
                       </Select>
                       <FormMessage />

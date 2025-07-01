@@ -19,9 +19,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { addUser } from "@/redux/features/userSlice";
 import { useAppDispatch } from "@/redux/hook";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 const AddUser = () => {
+  const [open, setOpen] = useState(false)
     const dispatch = useAppDispatch();
   const form = useForm({
     defaultValues:{
@@ -32,11 +34,13 @@ const AddUser = () => {
   const onsubmit = (data:any)=>{
     console.log(data.name)
     dispatch(addUser(data.name))
+    setOpen(true)
+    form.reset()
   }
 
   return (
     <>
-      <Dialog>
+      <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           <Button className="bg-green-500 text-black font-bold hover:bg-white hover:text-black-500">
             Add User
