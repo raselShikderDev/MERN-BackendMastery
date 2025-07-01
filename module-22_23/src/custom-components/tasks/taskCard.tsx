@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Pencil, Trash2 } from "lucide-react";
 import { format } from "date-fns";
 import type { ITask } from "@/redux/types";
-import { useAppDispatch } from "@/redux/hook";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import {
   toggoleIsCompleted,
   taskDelete,
@@ -26,16 +26,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { userSelector } from "@/redux/features/userSlice";
 
 interface TaskCardProps {
   task: ITask;
 }
 
 export default function TaskCard({ task }: TaskCardProps) {
-  const { id, title, description, dueDate, isComplete, priority } = task;
+  const { id, title, description, dueDate, isComplete, priority, assignedTo } = task;
 
   const dispatch = useAppDispatch();
-
+  const users = useAppSelector(userSelector)
+  const user = users.map((user)=>{
+    if(user.userId === assignedTo){
+      return user
+    }
+  })
+  log
   // Handle open/close of the edit modal
   const [open, setOpen] = useState(false);
 
@@ -95,6 +102,11 @@ export default function TaskCard({ task }: TaskCardProps) {
               {dueDate && (
                 <p className="text-xs text-muted-foreground mt-2">
                   🗓 Due: {format(dueDate, "PPP")}
+                </p>
+              )}
+              {user && (
+                <p className="text-xs text-muted-foreground mt-2">
+                  Assigned To: {users}
                 </p>
               )}
             </div>

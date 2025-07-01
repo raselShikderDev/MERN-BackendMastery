@@ -37,10 +37,12 @@ import { useForm } from "react-hook-form";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { addTask } from "@/redux/features/todoSlice";
-import { useAppDispatch } from "@/redux/hook";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
+import { userSelector } from "@/redux/features/userSlice";
 
 export function AddTaskModal() {
     const dispatch = useAppDispatch();
+    const users = useAppSelector(userSelector)
 
   const form = useForm({
     defaultValues: {
@@ -124,6 +126,34 @@ export function AddTaskModal() {
                           <SelectItem value="Normal">Normal</SelectItem>
                           <SelectItem value="Medium">Medium</SelectItem>
                           <SelectItem value="High">High</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="priority"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Assign to</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select Assign to" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {
+                            users.map((user)=>{
+                             return <SelectItem key={user.userId} value={user.name}>{user.name}</SelectItem>
+                            })
+                            
+                          }
                         </SelectContent>
                       </Select>
                       <FormMessage />

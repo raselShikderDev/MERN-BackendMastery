@@ -4,7 +4,8 @@ export interface ITask{
     description: string;
     dueDate: Date | null;
     isComplete: boolean;
-    priority: "Normal" | "Medium" | "High"; 
+    priority: "Normal" | "Medium" | "High";
+    assignedTo:string | null;
 }
 
 export interface IUser{
