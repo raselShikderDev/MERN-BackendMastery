@@ -102,11 +102,10 @@ export default function TaskCard({ task }: TaskCardProps) {
                   🗓 Due: {format(dueDate, "PPP")}
                 </p>
               )}
-              {assignedUser && (
+              
                 <p className="text-xs text-muted-foreground mt-2">
-                  Assigned To: { assignedUser.name ? assignedUser.name : "assigned to non"}
+                  Assigned To - { assignedUser?.name ? assignedUser.name : "No One"}
                 </p>
-              )}
             </div>
           </div>
           <Button
