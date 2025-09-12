@@ -1,16 +1,17 @@
-import express from 'express';
-import { PostController } from './post.controller';
+import { Router } from "express";
+import { postController } from "./post.controller";
 
-const router = express.Router();
 
-router.post(
-    "/",
-    PostController.createPost
-)
+const router = Router()
 
-// get all posts
-// get single post
-// update post
-// delete post
 
-export const postRouter = router;
+
+router.post("/", postController.createPost)
+router.get("/all", postController.getAllPost)
+router.get("/:id", postController.getPost)
+router.patch("/:id", postController.updatePost)
+router.delete("/:id", postController.deletePost)
+
+
+
+export const postRouter = router

@@ -7,19 +7,21 @@ dotenv.config();
 
 let server: Server | null = null;
 
-async function connectToDB() {
-  try {
-    await prisma.$connect()
-    console.log("*** DB connection successfull!!")
-  } catch (error) {
-    console.log("*** DB connection failed!")
-    process.exit(1);
-  }
+async function connectDB(){
+try {
+  await prisma.$connect()
+  console.log("Database successfully connected");
+} catch (error) {
+  console.log(error);
+  process.exit()
 }
+}
+
+
 
 async function startServer() {
   try {
-    await connectToDB()
+    await connectDB()
     server = http.createServer(app);
     server.listen(process.env.PORT, () => {
       console.log(`🚀 Server is running on port ${process.env.PORT}`);
