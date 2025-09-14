@@ -17,7 +17,7 @@ const createPost = async (payload: Prisma.PostCreateInput): Promise<Post> => {
   return result;
 };
 
-// Get all user
+// Get all post
 const getAllPost = async ({
   limit = 10,
   page = 1,
@@ -41,8 +41,8 @@ const getAllPost = async ({
     AND: [
       search && {
         OR: [
-          {title: { contains: search, mode: "insensitive" }},
-          {content: { contains: search, mode: "insensitive" }}
+          { title: { contains: search, mode: "insensitive" } },
+          { content: { contains: search, mode: "insensitive" } },
         ],
       },
       typeof isFeatured === "boolean" && { isFeatured },
@@ -52,6 +52,15 @@ const getAllPost = async ({
   };
   const skip = (page - 1) * limit;
   const allPost = await prisma.post.findMany({
+    include: {
+      author: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
+    },
     where: where,
     take: limit,
     skip,
@@ -71,17 +80,37 @@ const getAllPost = async ({
   };
 };
 
-// Update singel user  by id
+// Update singel post  by id
 const getPost = async (id: number) => {
-  const post = await prisma.post.findUnique({
-    where: {
-      id,
-    },
+  return await prisma.$transaction(async (transaction) => {
+    await transaction.post.update({
+      where: {
+        id,
+      },
+      data: {
+        views: {
+          increment: 1,
+        },
+      },
+    });
+    return await transaction.post.findUnique({
+      include: {
+        author: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+      },
+      where: {
+        id,
+      },
+    });
   });
-  return post;
 };
 
-// Get singel user  by id
+// Update singel post  by id
 const updatePost = async (id: number, payload: Partial<Post>) => {
   const post = await prisma.post.update({
     where: {
@@ -92,7 +121,7 @@ const updatePost = async (id: number, payload: Partial<Post>) => {
   return post;
 };
 
-// Get singel user  by id
+// Delete singel user  by id
 const deletePost = async (id: number) => {
   const post = await prisma.post.delete({
     where: {
