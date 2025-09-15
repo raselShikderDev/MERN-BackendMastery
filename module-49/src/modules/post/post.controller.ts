@@ -22,7 +22,7 @@ const getAllPost = async (req: Request, res: Response) => {
   const author = req.query.author as string || "";
   const search = req.query.search as string || "";
   const sortBy = req.query.sortBy as string || "";
-  const sortOrder = (req.query.sortOrder as string).toLowerCase() === "desc" ? "desc" : "asc"
+  const sortOrder = (req.query.sortOrder as string) === "desc" ? "desc" : "asc"
   const tags = req.query.tags ? (req.query.tags as string).split(",") : [];
   const page = Number(req.query.page) || 1;
   const limit = Number(req.query.limit) || 10;
@@ -82,10 +82,24 @@ const deletePost = async (req: Request, res: Response) => {
   }
 };
 
+// Update user
+const getPostStats = async (req: Request, res: Response) => {
+  try {
+    const result = await postService.getPostStats();
+    console.log("In controller get stats: ", result);
+
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    throw new Error(`Something went wrong in get stats controller!`);
+  }
+};
+
 export const postController = {
   createPost,
   getAllPost,
   getPost,
   updatePost,
   deletePost,
+  getPostStats,
 };
