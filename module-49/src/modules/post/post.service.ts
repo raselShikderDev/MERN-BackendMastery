@@ -1,6 +1,7 @@
 import { Post, Prisma } from "@prisma/client";
 import { prisma } from "../../config/db";
 
+// create post
 const createPost = async (payload: Prisma.PostCreateInput): Promise<Post> => {
   const result = await prisma.post.create({
     data: payload,
@@ -131,10 +132,87 @@ const deletePost = async (id: number) => {
   return post;
 };
 
+const getPostStats = async () => {
+  return await prisma.$transaction(async (tx) => {
+    const stats = await tx.post.aggregate({
+      _count: true,
+      _sum: { views: true },
+      _max: { views: true },
+      _min: { views: true },
+      _avg: { views: true },
+    });
+    const totalFeaturedPost = await tx.post.count({
+      where: {
+        isFeatured: true,
+      },
+    });
+
+    const topFeaturedPost = await tx.post.findFirst({
+      where: {
+        isFeatured: true,
+      },
+      include: {
+        author: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+      },
+      orderBy: {
+        views: "desc",
+      },
+    });
+
+    const lastweek = new Date();
+    lastweek.setDate(lastweek.getDate() - 7);
+
+    const lastMonth = new Date();
+    lastMonth.setDate(lastMonth.getDate() - 30);
+
+    const today = new Date();
+    today.setDate(today.getDate() - 0);
+
+    const todayPost = await tx.post.count({
+      where: {
+        createdAt: { gt: today },
+      },
+    });
+    const lastMonthPost = await tx.post.count({
+      where: {
+        createdAt: { gte: lastMonth },
+      },
+    });
+    const lastweekPost = await tx.post.count({
+      where: {
+        createdAt: { gt: lastweek },
+      },
+    });
+
+    return {
+      total: stats._count,
+      minViews: stats._min.views,
+      maxViews: stats._max.views,
+      avgViews: stats._avg.views,
+      featuredPost: {
+        totalFeaturedPost,
+        topFeaturedPost,
+      },
+      postsByDays: {
+        todayPost,
+        lastMonthPost,
+        lastweekPost,
+      },
+    };
+  });
+};
+
 export const postService = {
   createPost,
   getAllPost,
   getPost,
   updatePost,
   deletePost,
+  getPostStats,
 };
